@@ -99,6 +99,15 @@ export const getIngenieros = async (): Promise<ResponseTipoProyectos> => {
 
 
 
+//llamado de los usuarios para notificacion de porcentajes de obras
+export const getUsuariosCorreo = async (): Promise<ResponseTipoProyectos> => {
+  return await client.get<{ data: any; status: string }>(`usuario-correos`, {
+    headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+  });
+};
+
+
+
 
 
 
