@@ -39,7 +39,7 @@ import {
   LiaTerminalSolid,
   LiaBarcodeSolid,
 } from "react-icons/lia";
-import { MdGroup, MdOutlineAddHomeWork } from "react-icons/md";
+import { MdGroup, MdLocalGroceryStore, MdOutlineAddHomeWork } from "react-icons/md";
 import { IoTicketOutline } from "react-icons/io5";
 
 interface Props {
@@ -77,6 +77,7 @@ const moduleIcons = [
   { cod: "MA", icon: <TfiAlarmClock /> },
   { cod: "CLI", icon: <HiUserGroup /> },
   { cod: "PMPT", icon: <MdOutlineAddHomeWork /> },
+  { cod: "COMPA", icon: <MdLocalGroceryStore /> },
 ];
 
 export const CustomMenu = ({ onLoader, user, collapsed }: Props) => {
