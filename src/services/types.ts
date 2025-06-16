@@ -5698,3 +5698,49 @@ export interface InfoProyectosDash {
   clientesInactivos: string;
   clientesActivos: string;
 }
+
+//compras
+
+export interface ResponsePapeleria {
+  data: {
+    status: string;
+    data: Papeleria[];
+  };
+}
+export interface Papeleria {
+  id: number;
+  codigo_insumo: string;
+  insumo_descripcion: string;
+  unidad: string;
+  mat_requerido: string;
+  agrupacion_descripcion: string;
+  nombre_tercero: string;
+  prefijo: string;
+  fecha_pedido: string;
+  punto_envio: string;
+  created_at: string;
+  updated_at: string;
+}
+
+//fin papeleria
+
+
+
+
+/* type de datos categorias */
+export interface ResponseProveedores {
+  data: {
+    status: string;
+    data: Proveedores[];
+  };
+}
+export interface Proveedores {
+  id: number;
+  nombre: string;
+  correo: string;
+  estado: number;
+  ciudad: string;
+  telefono: string;
+  created_at: string;
+  updated_at: string;
+}

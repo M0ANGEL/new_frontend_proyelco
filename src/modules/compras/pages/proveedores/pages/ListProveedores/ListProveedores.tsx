@@ -8,19 +8,16 @@ import { EditOutlined, SyncOutlined } from "@ant-design/icons";
 import useSessionStorage from "@/modules/common/hooks/useSessionStorage";
 import { KEY_ROL } from "@/config/api";
 import dayjs from "dayjs";
-import { DeleteAmCliente, getAmClientes } from "@/services/administraClientes/AdministrarClientesApi";
 import { SearchBar } from "@/modules/gestion-empresas/pages/empresas/pages/ListEmpresas/styled";
+import { DeleteProveedor, getProveedores } from "@/services/compras/proveedoresAPI";
 
 interface DataType {
   key: number;
-  emp_nombre: string;
-  estado: string;
-  nit: number;
-  direccion: string;
-  telefono: string;
-  cuenta_de_correo: string;
-  id_user: string;
   nombre: string;
+  estado: string;
+  correo: number;
+  ciudad: string;
+  telefono: string;
   created_at: string;
   updated_at: string;
 }
@@ -41,18 +38,15 @@ export const ListProveedores = () => {
   }, []);
 
   const fetchCategorias = () => {
-    getAmClientes().then(({ data: { data } }) => {
+    getProveedores().then(({ data: { data } }) => {
       const categorias = data.map((categoria) => {
         return {
           key: categoria.id,
-          emp_nombre: categoria.emp_nombre,
-          estado: categoria.estado.toString(),
-          nit: categoria.nit,
-          direccion: categoria.direccion,
-          telefono: categoria.telefono,
-          cuenta_de_correo: categoria.cuenta_de_correo,
           nombre: categoria.nombre,
-          id_user: categoria.id_user,
+          estado: categoria.estado.toString(),
+          correo: categoria.correo,
+          ciudad: categoria.ciudad,
+          telefono: categoria.telefono,
           created_at: dayjs(categoria?.created_at).format("DD-MM-YYYY HH:mm"),
           updated_at: dayjs(categoria?.updated_at).format("DD-MM-YYYY HH:mm"),
         };
@@ -78,7 +72,7 @@ export const ListProveedores = () => {
   //cambio de estado
   const handleStatus = (id: React.Key) => {
     setLoadingRow([...loadingRow, id]);
-    DeleteAmCliente(id)
+    DeleteProveedor(id)
       .then(() => {
         fetchCategorias();
       })
@@ -90,20 +84,20 @@ export const ListProveedores = () => {
   const columns: ColumnsType<DataType> = [
     {
       title: "Nombre",
-      dataIndex: "emp_nombre",
-      key: "emp_nombre",
-      sorter: (a, b) => a.emp_nombre.localeCompare(b.emp_nombre),
-    },
-    {
-      title: "Correo",
-      dataIndex: "nit",
-      key: "nit",
-    },
-    {
-      title: "Ciudad",
       dataIndex: "nombre",
       key: "nombre",
       sorter: (a, b) => a.nombre.localeCompare(b.nombre),
+    },
+    {
+      title: "Correo",
+      dataIndex: "correo",
+      key: "correo",
+    },
+    {
+      title: "Ciudad",
+      dataIndex: "ciudad",
+      key: "ciudad",
+      sorter: (a, b) => a.ciudad.localeCompare(b.ciudad),
     },
     {
       title: "Telefono",

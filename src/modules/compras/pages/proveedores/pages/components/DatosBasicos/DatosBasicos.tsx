@@ -12,12 +12,10 @@ export const DatosBasicos = ({ TkCategoria }: Props) => {
   useEffect(() => {
     //si tenemos datos en categoria agregamos a metho los datos
     if (TkCategoria) {
-      methods.setValue("emp_nombre", TkCategoria?.emp_nombre);
-      methods.setValue("nit", TkCategoria?.nit);
-      methods.setValue("direccion", TkCategoria?.direccion);
+      methods.setValue("nombre", TkCategoria?.nombre);
+      methods.setValue("correo", TkCategoria?.correo);
+      methods.setValue("ciudad", TkCategoria?.ciudad);
       methods.setValue("telefono", TkCategoria?.telefono);
-      methods.setValue("cuenta_de_correo", TkCategoria?.cuenta_de_correo);
-      methods.setValue("id_user", TkCategoria?.id_user);
     } else {
       /*  methods.setValue('estado', '1') */
     }
@@ -105,7 +103,7 @@ export const DatosBasicos = ({ TkCategoria }: Props) => {
       {/* cuenta de correo de proveedor */}
       <Col xs={24} sm={12} style={{ width: "100%" }}>
         <Controller
-          name="cuenta_de_correo"
+          name="correo"
           control={methods.control}
           rules={{
             required: {
