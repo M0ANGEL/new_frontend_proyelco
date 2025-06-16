@@ -5727,7 +5727,7 @@ export interface Papeleria {
 
 
 
-/* type de datos categorias */
+/* type de datos proveedor */
 export interface ResponseProveedores {
   data: {
     status: string;
@@ -5741,6 +5741,26 @@ export interface Proveedores {
   estado: number;
   ciudad: string;
   telefono: string;
+  created_at: string;
+  updated_at: string;
+}
+
+
+/* type de datos personal */
+export interface ResponsePersonales {
+  data: {
+    status: string;
+    data: Personales[];
+  };
+}
+export interface Personales {
+  id: number;
+  nombres: string;
+  apellidos: string;
+  cedula: number;
+  estado: string;
+  telefono: string;
+  cargo_id: string;
   created_at: string;
   updated_at: string;
 }
