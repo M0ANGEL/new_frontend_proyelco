@@ -20,7 +20,16 @@ import { Notification } from "@/modules/auth/pages/LoginPage/types";
 import { AmClientes } from "@/services/types";
 import { DatosBasicos } from "../components/DatosBasicos";
 import useSerialize from "@/modules/common/hooks/useUpperCase";
-import { crearAmCliente, getAmcliente, updateAmCliente } from "@/services/administraClientes/AdministrarClientesApi";
+import {
+  crearAmCliente,
+  getAmcliente,
+  updateAmCliente,
+} from "@/services/administraClientes/AdministrarClientesApi";
+import {
+  crearProveedor,
+  getProveedore,
+  updateProvedor,
+} from "@/services/compras/proveedoresAPI";
 
 const { Text } = Typography;
 
@@ -36,7 +45,7 @@ export const FormProveedores = () => {
   useEffect(() => {
     //si hay un id ejecutamos una consulta para traer datos de esa categoria
     if (id) {
-      getAmcliente(id).then(({ data }) => {
+      getProveedore(id).then(({ data }) => {
         setCategoria(data);
         setLoaderSave(false);
       });
@@ -65,39 +74,27 @@ export const FormProveedores = () => {
     setLoaderSave(true);
 
     if (categoria) {
-      updateAmCliente(data, id)
+      updateProvedor(data, id)
         .then(() => {
-          pushNotification({ title: "CLiente actualizado con éxito!" });
+          pushNotification({ title: "Proveedor actualizado con éxito!" });
           setTimeout(() => {
             navigate("..");
           }, 800);
         })
         .catch((error) => {
-          // Manejo de error si ya existen tickets con el prefijo
-          if (
-            error.response?.data?.message?.includes(
-              "No se puede actualizar el nit porque ya hay un cliente con este NIT."
-            )
-          ) {
-            pushNotification({
-              type: "error",
-              title: "Error",
-              description:
-                "No se puede actualizar el nit porque ya hay un cliente con este NIT.",
-            });
-          } else {
-            pushNotification({
-              type: "error",
-              title: "Error al actualizar",
-              description: error.message || "Ocurrió un error inesperado",
-            });
-          }
+          pushNotification({
+            type: "error",
+            title: "Error",
+            description:
+              "No se puede actualizar el proveedor.",
+          });
+
           setLoaderSave(false);
         });
     } else {
-      crearAmCliente(data)
+      crearProveedor(data)
         .then(() => {
-          pushNotification({ title: "Cliente creado con éxito!" });
+          pushNotification({ title: "Proveedor creado con éxito!" });
           setTimeout(() => {
             navigate(-1);
           }, 800);
@@ -106,9 +103,7 @@ export const FormProveedores = () => {
           pushNotification({
             type: "error",
             title: error.error,
-            description: error.response?.data?.errors?.prefijo
-              ? "PREFIJO EN USO"
-              : error.message,
+            description: error.message,
           });
           setLoaderSave(false);
         });
@@ -139,9 +134,7 @@ export const FormProveedores = () => {
                   <Button
                     htmlType="submit"
                     type="primary"
-                    icon={
-                      <SaveOutlined />
-                    } 
+                    icon={<SaveOutlined />}
                   >
                     Guardar
                   </Button>

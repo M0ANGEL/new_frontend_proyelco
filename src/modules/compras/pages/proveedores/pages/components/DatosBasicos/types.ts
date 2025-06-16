@@ -1,5 +1,5 @@
-import { AmClientes } from "@/services/types";
+import {  Proveedores } from "@/services/types";
 
 export interface Props {
-  TkCategoria?: AmClientes;
+  TkCategoria?: Proveedores;
 }
