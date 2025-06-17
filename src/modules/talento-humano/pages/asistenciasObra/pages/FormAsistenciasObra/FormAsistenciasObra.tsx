@@ -19,15 +19,11 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { Notification } from "@/modules/auth/pages/LoginPage/types";
 import { AmClientes } from "@/services/types";
 import { DatosBasicos } from "../components/DatosBasicos";
-import {
-  crearPersonal,
-  getPersonal,
-  updatePersonal,
-} from "@/services/talento-humano/personalAPI";
+import { crearAsistencias, getAsistencia, updateAsistencia } from "@/services/talento-humano/asistenciasAPI";
 
 const { Text } = Typography;
 
-export const FormPersonal = () => {
+export const FormAsistenciasObra = () => {
   const [api, contextHolder] = notification.useNotification();
   const [loaderSave, setLoaderSave] = useState<boolean>(false);
   const control = useForm();
@@ -38,7 +34,7 @@ export const FormPersonal = () => {
   useEffect(() => {
     //si hay un id ejecutamos una consulta para traer datos de esa categoria
     if (id) {
-      getPersonal(id).then(({ data }) => {
+      getAsistencia(id).then(({ data }) => {
         setCategoria(data);
         setLoaderSave(false);
       });
@@ -62,29 +58,43 @@ export const FormPersonal = () => {
 
   //guardado de los datos
   const onFinish: SubmitHandler<any> = async (data) => {
+
     setLoaderSave(true);
 
     if (categoria) {
-      updatePersonal(data, id)
+      updateAsistencia(data, id)
         .then(() => {
-          pushNotification({ title: "Empleado actualizado con éxito!" });
+          pushNotification({ title: "Cronograma actualizado con éxito!" });
           setTimeout(() => {
             navigate("..");
           }, 800);
         })
         .catch((error) => {
-          pushNotification({
-            type: "error",
-            title: "Error",
-            description: error + "No se puede actualizar el Empleado.",
-          });
-
+          // Manejo de error si ya existen tickets con el prefijo
+          if (
+            error.response?.data?.message?.includes(
+              "No se puede actualizar el nit porque ya hay un cliente con este NIT."
+            )
+          ) {
+            pushNotification({
+              type: "error",
+              title: "Error",
+              description:
+                "No se puede actualizar el nit porque ya hay un cliente con este NIT.",
+            });
+          } else {
+            pushNotification({
+              type: "error",
+              title: "Error al actualizar",
+              description: error.message || "Ocurrió un error inesperado",
+            });
+          }
           setLoaderSave(false);
         });
     } else {
-      crearPersonal(data)
+      crearAsistencias(data)
         .then(() => {
-          pushNotification({ title: "Empleado creado con éxito!" });
+          pushNotification({ title: "Cronograma creado con éxito!" });
           setTimeout(() => {
             navigate(-1);
           }, 800);
@@ -118,13 +128,15 @@ export const FormPersonal = () => {
             autoComplete="off"
           >
             <StyledCard
-              title={(categoria ? "Editar" : "Crear") + " Personal"}
+              title={(categoria ? "Editar" : "Crear") + " Programacion Asistencia"}
               extra={
                 <Space>
                   <Button
                     htmlType="submit"
                     type="primary"
-                    icon={<SaveOutlined />}
+                    icon={
+                      <SaveOutlined />
+                    } 
                   >
                     Guardar
                   </Button>
@@ -188,3 +200,4 @@ export const FormPersonal = () => {
     </>
   );
 };
+
