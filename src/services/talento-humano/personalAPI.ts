@@ -32,7 +32,7 @@ export const updatePersonal = async (data: any, id: any): Promise<any> => {
 
 //cambiar el estado de la categoria 
 export const DeletePersonal = async ( id: any): Promise<any> => {
-  return await client.delete<any>(`proveedores/${id}`, {
+  return await client.delete<any>(`personal/${id}`, {
     headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
   });
 };

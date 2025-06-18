@@ -16,6 +16,7 @@ export interface DataType {
   usurioConfirma: string;
   descripcion_proyecto: string;
   created_at: string;
+  activo?: string;
   updated_at: string;
   created_at_string: string;
   }

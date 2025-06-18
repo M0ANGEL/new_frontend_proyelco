@@ -795,7 +795,7 @@ export interface ResponseAsistencia {
 }
 export interface Asistencia {
   id: number;
-  personl_id: string;
+  personal_id: string;
   proyecto_id: string;
   usuario_asigna: number;
   usuario_confirma: string;
@@ -806,9 +806,11 @@ export interface Asistencia {
   cargo: string;
   nombres: string;
   apellidos: string;
+  cedula: string;
   usurioConfirma: string;
   descripcion_proyecto: string;
   created_at: string;
+  activo?: string;  //columna virtual
   updated_at: string;
   created_at_string: string;
 }

@@ -16,8 +16,10 @@ import {
   getTkEmpleados,
   getTkProyectos,
 } from "@/services/talento-humano/asistenciasAPI";
+import dayjs from "dayjs";
 
 const { Text } = Typography;
+const { RangePicker } = DatePicker;
 
 export const DatosBasicos = ({ TkCategoria }: Props) => {
   const methods = useFormContext();
@@ -29,8 +31,8 @@ export const DatosBasicos = ({ TkCategoria }: Props) => {
     fetchProyectos();
     //si tenemos datos en categoria agregamos a metho los datos
     if (TkCategoria) {
-      methods.setValue("nombres", TkCategoria?.nombres);
-      methods.setValue("proyecto_id", TkCategoria?.proyecto_id);
+      methods.setValue("personal_id", TkCategoria?.personal_id.toString());
+      methods.setValue("proyecto_id", TkCategoria?.proyecto_id.toString());
       methods.setValue("fecha_programacion", TkCategoria?.fecha_programacion);
     } else {
       /*  methods.setValue('estado', '1') */
@@ -44,7 +46,7 @@ export const DatosBasicos = ({ TkCategoria }: Props) => {
     setProyectos(
       usuariosproce.map((item) => ({
         label: item.descripcion_proyecto,
-        value: item.id,
+        value: item.id.toString(),
       }))
     );
   };
@@ -55,8 +57,8 @@ export const DatosBasicos = ({ TkCategoria }: Props) => {
     const usuariosproce = response?.data?.data || [];
     setEmpleados(
       usuariosproce.map((item) => ({
-        label: item.nombres,
-        value: item.id,
+        label: `${item.nombres} - ${item.apellidos} (${item.cedula})`,
+        value: item.id.toString(),
       }))
     );
   };
@@ -65,7 +67,7 @@ export const DatosBasicos = ({ TkCategoria }: Props) => {
     <Row gutter={24}>
       {/* fecha de programacion */}
 
-      <Col xs={24} sm={12} md={6}>
+      {TkCategoria ? (
         <Controller
           name="fecha_programacion"
           control={methods.control}
@@ -76,18 +78,49 @@ export const DatosBasicos = ({ TkCategoria }: Props) => {
             },
           }}
           render={({ field, fieldState: { error } }) => (
-            <StyledFormItem required label="Fecha Inicio:">
+            <StyledFormItem required label="Fecha Programacion:">
               <DatePicker
                 {...field}
                 status={error && "error"}
                 placeholder="10/01/01"
                 style={{ width: "100%" }}
+                value={field.value ? dayjs(field.value) : null} // Asegura que sea dayjs
+                onChange={(date) => {
+                  if (date && date.isValid && date.isValid()) {
+                    field.onChange(date.toISOString()); // Puedes guardar el ISO o el objeto completo
+                  } else {
+                    field.onChange(null); // Limpiar si es inválido
+                  }
+                }}
               />
               <Text type="danger">{error?.message}</Text>
             </StyledFormItem>
           )}
         />
-      </Col>
+      ) : (
+        <Col xs={24} sm={12} md={8}>
+          <Controller
+            name="fecha_programacion"
+            control={methods.control}
+            rules={{
+              required: {
+                value: true,
+                message: "Fecha de programacion es requerido",
+              },
+            }}
+            render={({ field, fieldState: { error } }) => (
+              <StyledFormItem required label="Rango de Programacion:">
+                <RangePicker
+                  {...field}
+                  status={error && "error"}
+                  format="DD-MM-YYYY"
+                />
+                <Text type="danger">{error?.message}</Text>
+              </StyledFormItem>
+            )}
+          />
+        </Col>
+      )}
 
       {/* proyecto */}
       <Col xs={24} sm={8}>
@@ -96,8 +129,8 @@ export const DatosBasicos = ({ TkCategoria }: Props) => {
           control={methods.control}
           rules={{
             required: {
-              value: false, // Validación dinámica
-              message: "El usuario es requerido",
+              value: true, // Validación dinámica
+              message: "El proyecto es requerido",
             },
           }}
           render={({ field, fieldState: { error } }) => (
@@ -146,7 +179,7 @@ export const DatosBasicos = ({ TkCategoria }: Props) => {
             <StyledFormItem
               label={
                 <span>
-                  Usuarios {" "}
+                  Usuarios{" "}
                   <Tooltip title="Aquí seleccionas los usuarios que depende el cronograma seran en asistencias">
                     <InfoCircleOutlined
                       style={{ color: "#faad14", cursor: "pointer" }}
