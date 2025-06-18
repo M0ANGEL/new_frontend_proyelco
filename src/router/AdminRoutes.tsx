@@ -11,6 +11,7 @@ import { LogSistemaRoutes } from "../modules/logs-sistema";
 import { AdministrarClientesRoutes } from "../modules/clientes";
 import { AdministrarProcesosProyectoRoutes } from "../modules/procesosObra";
 import { ComprasRoutes } from "@/modules/compras";
+import { TalentoHumanoRoutes } from "@/modules/talento-humano/routes/TalentoHumanoRoutes";
 
 export const AdminRoutes = () => {
   return (
@@ -42,6 +43,7 @@ export const AdminRoutes = () => {
               element={<AdministrarProcesosProyectoRoutes />}
             />
             <Route path={"compras/*"} element={<ComprasRoutes />} />
+            <Route path={"modulodetalentohumano/*"} element={<TalentoHumanoRoutes />} />
 
             {/* 
             <Route path={"tickets/*"} element={<TickestRoutes />} />
